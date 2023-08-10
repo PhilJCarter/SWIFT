@@ -879,9 +879,25 @@ __attribute__((always_inline)) INLINE static void hydro_predict_extra(
  * @param cosmo The current cosmological model.
  */
 __attribute__((always_inline)) INLINE static void hydro_end_force(
-    struct part *restrict p, const struct cosmology *cosmo) {
+    struct part *restrict p, 
+#ifdef PLANETARY_VEL_DAMP
+    struct xpart *restrict xp, 
+#endif
+    const struct cosmology *cosmo) {
 
   p->force.h_dt *= p->h * hydro_dimension_inv;
+
+#ifdef PLANETARY_VEL_DAMP
+  /* Reduce particle velocities by factor two */
+  p->v[0] *= 0.5;
+  p->v[1] *= 0.5;
+  p->v[2] *= 0.5;
+  xp->v_full[0] = p->v[0];
+  xp->v_full[1] = p->v[1];
+  xp->v_full[2] = p->v[2];
+
+#endif
+
 }
 
 /**

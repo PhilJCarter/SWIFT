@@ -488,6 +488,18 @@ if test "$planetary_fixed_entropy" = "yes"; then
    AC_DEFINE([PLANETARY_FIXED_ENTROPY],1,[Enable planetary fixed entropy])
 fi
 
+# Check if velocity damping is on for settling planetary initial conditions
+AC_ARG_ENABLE([planetary-velocity-damping],
+   [AS_HELP_STRING([--enable-planetary-velocity-damping],
+     [Damp particle velocities for settling planetary initial conditions @<:@yes/no@:>@]
+   )],
+   [planetary_velocity_damping="$enableval"],
+   [planetary_velocity_damping="no"]
+)
+if test "$planetary_velocity_damping" = "yes"; then
+   AC_DEFINE([PLANETARY_VEL_DAMP],1,[Enable planetary velocity damping])
+fi
+
 # Check whether we have any of the ARM v8.1 tick timers
 AX_ASM_ARM_PMCCNTR
 AX_ASM_ARM_CNTVCT
@@ -3066,6 +3078,7 @@ AC_MSG_RESULT([
    Boundary particles          : $boundary_particles
    Fixed boundary particles    : $fixed_boundary_particles
    Planetary fixed entropy     : $planetary_fixed_entropy
+   Planetary velocity damping  : $planetary_velocity_damping
    Ghost statistics            : $ghost_stats
 
    Continuous Sim. Data Stream : $with_csds
